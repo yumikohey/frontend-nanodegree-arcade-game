@@ -23,11 +23,10 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        cW = canvas.width,
-        cH = canvas.height,
-        lastTime
-        cW = 505,
-        cH = 606;
+        lastTime;
+        canvas.width = 505,
+        canvas.height = 606;
+
 
     doc.body.appendChild(canvas);
 
@@ -82,7 +81,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -174,7 +173,9 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-horn-girl.png',
+        'images/enemy-bug.png'
     ]);
     Resources.onReady(init);
 

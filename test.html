@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Effective JavaScript: Frogger</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <script>
+window.addEventListener('load', eventWindowLoaded, false);
+
+function eventWindowLoaded() {
+  canvasApp();
+
+}
+function canvasApp(){
+  var keyPressList = [];
+  var rowImages = [],
+    imgArray = ['images/water-block.png',   // Top row is water
+                'images/stone-block.png',   // Row 1 of 3 of stone
+                'images/stone-block.png',   // Row 2 of 3 of stone
+                'images/stone-block.png',   // Row 3 of 3 of stone
+                'images/grass-block.png',   // Row 1 of 2 of grass
+                'images/grass-block.png'    // Row 2 of 2 of grass
+            ];
+
+   for (var i=0; i < imgArray.length; i++) {
+      var singleImage = new Image();
+      singleImage.src = imgArray[i];
+      rowImages.push(singleImage);
+   }
+
+  var enemyImg = new Image();
+  enemyImg.src = 'images/enemy-bug.png';
+
+  var playerChar = new Image();
+  playerChar.src = 'images/char-horn-girl.png';
+
+  var theCanvas = document.getElementById('canvas');
+    if (!theCanvas || !theCanvas.getContext) {
+        return;
+    }
+
+    var ctx = theCanvas.getContext('2d');
+
+  if (!ctx) {
+      return;
+    }
+  // Enemy 1 initialized
+  var enemyX = 0,
+      enemyYpos = [55,145,225],
+      enemyY = enemyYpos[Math.floor(Math.random() * 3)];
+
+
+
+    // Player Initialized
+    var playerX = 200, playerY = 405;
+
+
+
+  function drawScreen() {
+    backgroundRender();
+
+    enemyX += 5;
+    if (enemyX > 606){
+      enemyX = 0;
+    }
+
+    if (keyPressList[37]) {
+      playerX -= 25;
+    }
+    if (keyPressList[38]) {
+      playerY -= 25;
+    }
+    if (keyPressList[39]) {
+      playerX += 25;
+    }
+    if (keyPressList[40]) {
+      playerY += 25;
+    }
+
+    ctx.drawImage(enemyImg, enemyX, enemyY);
+    ctx.drawImage(playerChar, playerX, playerY);
+    collisionDetect();
+  }
+
+  function collisionDetect(){
+    if( playerX > enemyX && (playerX <= enemyX + 50) && (playerY < enemyY + 50) && playerY > enemyY ){
+      playerX = 200;
+      playerY = 405;
+    }
+
+  }
+
+  function backgroundRender() {
+        var numRows = 6,
+            numCols = 5,
+            row, col;
+        for (row = 0; row < numRows; row++) {
+            for (col = 0; col < numCols; col++) {
+                ctx.drawImage(rowImages[row], col * 101, row * 83);
+            }
+        }
+    }
+
+  gameLoop();
+
+
+  function gameLoop() {
+      drawScreen();
+      window.requestAnimationFrame(gameLoop);
+  }
+
+  document.onkeydown = function(e) {
+    e = e?e:window.event;
+    keyPressList[e.keyCode] = true;
+  };
+
+  document.onkeyup = function(e) {
+    e = e?e:window.event;
+    keyPressList[e.keyCode] = false;
+  };
+
+}
+
+
+
+</script>
+
+<div style="position: absolute; top: 50px; left: 50px;">
+<canvas id="canvas" width="505" height="606">
+</body>
+</html>
